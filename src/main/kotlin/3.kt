@@ -1,29 +1,50 @@
-import org.apache.commons.io.IOUtils
-
 fun main() {
-    val lines = IOUtils.readLines(IOUtils::class.java.getResourceAsStream("/3.txt"), "UTF-8")
+    val testInput = "..##.......\n" +
+            "#...#...#..\n" +
+            ".#....#..#.\n" +
+            "..#.#...#.#\n" +
+            ".#...##..#.\n" +
+            "..#.##.....\n" +
+            ".#.#.#....#\n" +
+            ".#........#\n" +
+            "#.##...#...\n" +
+            "#...##....#\n" +
+            ".#..#...#.#"
+    val testResult = 7
 
-    var result: Long = 1
-    val right = intArrayOf(1, 3, 5, 7, 1)
+    fun solve(lines: List<String>, right: IntArray): Long {
+        var result: Long = 1
 
-    right.forEachIndexed { index, rvalue ->
-        var trees = 0;
-        var i = 0
-        lines.forEachIndexed { lineIndex, line ->
-            if (index != 4 || lineIndex % 2 == 0) {
-                if (i >= line.length) {
-                    i -= line.length;
+        right.forEachIndexed { index, rvalue ->
+            var trees = 0;
+            var i = 0
+            lines.forEachIndexed { lineIndex, line ->
+                if (index != 4 || lineIndex % 2 == 0) {
+                    if (i >= line.length) {
+                        i -= line.length;
+                    }
+                    if (line.substring(i, i + 1) == "#") {
+                        trees++
+                    }
+                    i += rvalue
                 }
-                if (line.substring(i, i + 1) == "#") {
-                    trees++
-                }
-                i += rvalue
             }
+            result *= trees;
         }
-        result *= trees;
+
+        return result
     }
 
-    println(result)
+    fun solve1(lines: List<String>): Long {
+        return solve(lines, intArrayOf(3))
+    }
+
+    fun solve2(lines: List<String>): Long {
+        return solve(lines, intArrayOf(1, 3, 5, 7, 1))
+    }
+
+    solveAndTest(3, ::solve1, "One", testInput, testResult)
+    solveAndTest(3, ::solve2, "Two")
 }
 
 
