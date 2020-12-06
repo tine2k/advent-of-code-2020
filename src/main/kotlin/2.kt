@@ -7,7 +7,7 @@ fun main() {
             "2-9 c: ccccccccc"
     val testResult = 2
 
-    fun solve1(lines: List<String>): Long {
+    fun solve(lines: List<String>, isValid: (min: Int, max: Int, char: String, value: String) -> Boolean): Long {
         var validCount = 0
         val pattern = Pattern.compile("(\\d+)-(\\d+)\\s(\\w):\\s(.*)")
         lines.forEach {
@@ -18,8 +18,7 @@ fun main() {
             val char = m.group(3)
             val value = m.group(4)
 
-            val count = StringUtils.countMatches(value, char);
-            if (count in min..max) {
+            if (isValid(min, max, char, value)) {
                 validCount++
             }
         }
@@ -27,23 +26,17 @@ fun main() {
         return validCount.toLong()
     }
 
-    fun solve2(lines: List<String>): Long {
-        var validCount = 0L
-        val pattern = Pattern.compile("(\\d+)-(\\d+)\\s(\\w):\\s(.*)")
-        lines.forEach {
-            val m = pattern.matcher(it)
-            m.matches()
-            val min = Integer.valueOf(m.group(1))
-            val max = Integer.valueOf(m.group(2))
-            val char = m.group(3)
-            val value = m.group(4)
-
-            if ((value.substring(min - 1, min) == char) xor (value.substring(max - 1, max) == char)) {
-                validCount++
-            }
+    fun solve1(lines: List<String>): Long {
+        return solve(lines) { min, max, char, value ->
+            val count = StringUtils.countMatches(value, char)
+            count in min..max
         }
+    }
 
-        return validCount
+    fun solve2(lines: List<String>): Long {
+        return solve(lines) { min, max, char, value ->
+            (value.substring(min - 1, min) == char) xor (value.substring(max - 1, max) == char)
+        }
     }
 
     solveAndTest(2, ::solve1, "One", testInput, testResult)
