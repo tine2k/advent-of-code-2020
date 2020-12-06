@@ -1,0 +1,34 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+out
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.log*
+
+generated/
+classes/
+schema/
+landscape_setup/.env-ip
+log/
+logs/
+postgres/postgresdb
+
+bamboo-build-scripts/
+
+postgres/data
+postgres/data-*
+
+neo4j/database
