@@ -24,11 +24,11 @@ fun main() {
 
         takenSeats[seatId] = true
     }
-    System.out.println(highestId)
+    println(highestId)
 
     takenSeats.forEachIndexed { i, _ ->
         if (i > 7 && i < 8 * 126 && !takenSeats[i] && takenSeats[i + 1] && takenSeats[i - 1]) {
-            System.out.println("this is my seat: $i")
+            println("this is my seat: $i")
         }
     }
 }

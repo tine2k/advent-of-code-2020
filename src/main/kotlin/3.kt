@@ -4,7 +4,7 @@ fun main() {
     val lines = IOUtils.readLines(IOUtils::class.java.getResourceAsStream("/3.txt"), "UTF-8")
 
     var result: Long = 1
-    var right = intArrayOf(1, 3, 5, 7, 1)
+    val right = intArrayOf(1, 3, 5, 7, 1)
 
     right.forEachIndexed { index, rvalue ->
         var trees = 0;
@@ -23,7 +23,7 @@ fun main() {
         result *= trees;
     }
 
-    System.out.println(result)
+    println(result)
 }
 
 

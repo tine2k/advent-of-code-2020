@@ -7,7 +7,7 @@ fun main() {
     var validCount = 0
     val pattern = Pattern.compile("(\\d+)-(\\d+)\\s(\\w):\\s(.*)")
     lines.forEach {
-        System.out.println(it)
+        println(it)
         val m = pattern.matcher(it)
         m.matches()
         val min = Integer.valueOf(m.group(1))
@@ -20,7 +20,7 @@ fun main() {
         }
     }
 
-    System.out.println(validCount)
+    println(validCount)
 }
 
 

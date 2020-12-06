@@ -15,11 +15,11 @@ fun main() {
             "ecl",
             "pid")
 
-    lines.forEachIndexed { lineIndex, line ->
-        if (!line.isBlank()) {
+    lines.forEach { line ->
+        if (line.isNotBlank()) {
             line.split(" ").forEach { token ->
                 val tokens = token.split(":")
-                passport.put(tokens[0], tokens[1])
+                passport[tokens[0]] = tokens[1]
             }
         }
 
@@ -38,7 +38,7 @@ fun main() {
             passport = mutableMapOf()
         }
     }
-    System.out.println(isValid)
+    println(isValid)
 }
 
 //    byr (Birth Year) - four digits; at least 1920 and at most 2002.
@@ -60,7 +60,7 @@ fun validateEyr(token: String): Boolean {
 //    If cm, the number must be at least 150 and at most 193.
 //    If in, the number must be at least 59 and at most 76.
 fun validateHgt(token: String): Boolean {
-    System.out.println(token)
+    println(token)
     val pattern = Pattern.compile("(\\w*)(cm|in)")
     val matcher = pattern.matcher(token)
     if (matcher.matches()) {
