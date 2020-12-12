@@ -1,11 +1,11 @@
 fun main() {
+    val day = 1
     val testInput = "1721\n" +
             "979\n" +
             "366\n" +
             "299\n" +
             "675\n" +
             "1456\n"
-    val testResult = 514579
 
     fun solve1(lines: List<String>): Long {
         lines.forEach { a ->
@@ -31,6 +31,10 @@ fun main() {
         return -1
     }
 
-    solveAndTest(1, ::solve1, "One", testInput, testResult)
-    solveAndTest(1, ::solve2, "Two")
+    header(day, 1)
+    test(::solve1, testInput, 514579)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    solve(day, ::solve2)
 }

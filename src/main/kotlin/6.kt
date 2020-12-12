@@ -1,4 +1,5 @@
 fun main() {
+    val day = 6
     val testInput = "abc\n" +
             "\n" +
             "a\n" +
@@ -14,7 +15,6 @@ fun main() {
             "a\n" +
             "\n" +
             "b"
-    val testResult = 11
 
     fun solve1(lines: List<String>): Long {
         var rv =  0
@@ -52,7 +52,12 @@ fun main() {
         return rv.toLong()
     }
 
-    solveAndTest(6, ::solve1, "One", testInput, testResult)
-    solveAndTest(6, ::solve2, "Two", testInput, 6)
+    header(day, 1)
+    test(::solve1, testInput, 11)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    test(::solve2, testInput, 6)
+    solve(day, ::solve2)
 }
 

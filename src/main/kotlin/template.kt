@@ -1,6 +1,6 @@
 fun main() {
+    val day = -1
     val testInput = ""
-    val testResult = 1337
 
     fun solve1(lines: List<String>): Long {
         return 1337
@@ -10,6 +10,10 @@ fun main() {
         return 1337
     }
 
-    solveAndTest(1, ::solve1, "One", testInput, testResult)
-    solveAndTest(1, ::solve2, "Two")
+    header(day, 1)
+    test(::solve1, testInput, 1337)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    solve(day, ::solve2)
 }

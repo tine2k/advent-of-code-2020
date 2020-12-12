@@ -1,6 +1,6 @@
 fun main() {
+    val day = 5
     val testInput = "BFFFBBFRRR"
-    val testResult = 567
 
     fun changeRange(rowRange: IntRange, forward: Boolean): IntRange {
         val rowBound = (rowRange.last + 1 - rowRange.first) / 2;
@@ -43,8 +43,20 @@ fun main() {
         return Pair(highestId, -1)
     }
 
-    solveAndTest(5, { solve(it).first.toLong() }, "One", testInput, testResult)
-    solveAndTest(5, { solve(it).second.toLong() }, "Two")
+    fun solve1(lines: List<String>): Long {
+        return solve(lines).first.toLong()
+    }
+
+    fun solve2(lines: List<String>): Long {
+        return solve(lines).second.toLong()
+    }
+
+    header(day, 1)
+    test(::solve1, testInput, 567)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    solve(day, ::solve2)
 }
 
 

@@ -3,6 +3,8 @@ import java.util.regex.Pattern
 data class BagCount(val bag: String, val count: Int)
 
 fun main() {
+    val day = 7
+
     val testInput = "light red bags contain 1 bright white bag, 2 muted yellow bags.\n" +
             "dark orange bags contain 3 bright white bags, 4 muted yellow bags.\n" +
             "bright white bags contain 1 shiny gold bag.\n" +
@@ -12,7 +14,6 @@ fun main() {
             "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.\n" +
             "faded blue bags contain no other bags.\n" +
             "dotted black bags contain no other bags."
-    val testResult = 4
 
     val testInput2 = "shiny gold bags contain 2 dark red bags.\n" +
             "dark red bags contain 2 dark orange bags.\n" +
@@ -21,7 +22,6 @@ fun main() {
             "dark green bags contain 2 dark blue bags.\n" +
             "dark blue bags contain 2 dark violet bags.\n" +
             "dark violet bags contain no other bags."
-    val testResult2 = 126
 
     fun findBag(rel: Map<String, List<BagCount>>, result: MutableSet<String>, targets: List<String>): MutableSet<String> {
         val newTargets = mutableListOf<String>()
@@ -77,6 +77,11 @@ fun main() {
         return findContainingBagCount(getModel(lines), "shiny gold").toLong() - 1
     }
 
-    solveAndTest(7, ::solve1, "One", testInput, testResult)
-    solveAndTest(7, ::solve2, "Two", testInput2, testResult2)
+    header(day, 1)
+    test(::solve1, testInput, 4)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    test(::solve2, testInput2, 126)
+    solve(day, ::solve2)
 }

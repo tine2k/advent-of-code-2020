@@ -2,6 +2,7 @@ import org.apache.commons.io.IOUtils
 import java.io.StringReader
 
 fun main() {
+    val day = 9
     val testInput = "35\n" +
             "20\n" +
             "15\n" +
@@ -22,7 +23,6 @@ fun main() {
             "277\n" +
             "309\n" +
             "576"
-    val testResult = 127
 
     fun findNumber(number: Long, numbers: List<Long>): Boolean {
         numbers.forEach { i ->
@@ -69,6 +69,11 @@ fun main() {
         return -1
     }
 
-    solveAndTest(9, ::solve1, "One", testInput, testResult)
-    solveAndTest(9, ::solve2, "Two", testInput, 62)
+    header(day, 1)
+    test(::solve1, testInput, 127)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    test(::solve2, testInput, 62)
+    solve(day, ::solve2)
 }

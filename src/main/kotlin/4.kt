@@ -2,6 +2,7 @@ import org.apache.commons.lang3.math.NumberUtils
 import java.util.regex.Pattern
 
 fun main() {
+    val day = 4
     val testInput = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\n" +
             "byr:1937 iyr:2017 cid:147 hgt:183cm\n" +
             "\n" +
@@ -15,7 +16,6 @@ fun main() {
             "\n" +
             "hcl:#cfa07d eyr:2025 pid:166559648\n" +
             "iyr:2011 ecl:brn hgt:59in"
-    val testResult = 2
 
     //    byr (Birth Year) - four digits; at least 1920 and at most 2002.
     fun validateByr(token: String): Boolean {
@@ -107,8 +107,12 @@ fun main() {
                 validatePid(pp["pid"]!!)}
     }
 
-    solveAndTest(4, ::solve1, "One", testInput, testResult)
-    solveAndTest(4, ::solve2, "Two")
+    header(day, 1)
+    test(::solve1, testInput, 2)
+    solve(day, ::solve1)
+
+    header(day, 2)
+    solve(day, ::solve2)
 }
 
 
