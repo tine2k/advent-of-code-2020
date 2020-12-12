@@ -1,5 +1,4 @@
 fun main() {
-    val day = 5
     val testInput = "BFFFBBFRRR"
 
     fun changeRange(rowRange: IntRange, forward: Boolean): IntRange {
@@ -51,12 +50,12 @@ fun main() {
         return solve(lines).second.toLong()
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 567)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
-    solve(day, ::solve2)
+    header(2)
+    solve(::solve2)
 }
 
 

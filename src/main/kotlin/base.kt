@@ -1,29 +1,9 @@
 import org.apache.commons.io.IOUtils
 import java.io.StringReader
-import java.lang.IllegalArgumentException
 
-fun solveAndTest(day: Int?, solveFn: (List<String>) -> Long, part: String, testInput: String? = null, testResult: Int? = null) {
+val day = Thread.currentThread().stackTrace[2].fileName!!.split(".")[0]
 
-    println("--- Day $day Part $part ---");
-    if (testInput != null && testResult != null) {
-        val result = solveFn(IOUtils.readLines(StringReader(testInput)))
-        if (result != testResult.toLong()) {
-            println("Test-Result should be $testResult but was $result")
-        } else {
-            println("Test OK")
-        }
-    }
-
-    if (day != null) {
-        println(solveFn(getInputFile(day)))
-        println()
-    }
-}
-
-fun header(day: Int, part: Int) {
-    if (day < 0) {
-        throw IllegalArgumentException("Set correct day!")
-    }
+fun header(part: Int) {
     println("--- Day $day Part $part ---");
 }
 
@@ -36,11 +16,11 @@ fun test(solveFn: (List<String>) -> Long, testInput: String, testResult: Int) {
     }
 }
 
-fun solve(day: Int, solveFn: (List<String>) -> Long, input: List<String> = getInputFile(day)) {
+fun solve(solveFn: (List<String>) -> Long, input: List<String> = getInputFile()) {
     println(solveFn(input))
     println()
 }
 
-fun getInputFile(day: Int): List<String> {
+fun getInputFile(): List<String> {
     return IOUtils.readLines(IOUtils::class.java.getResourceAsStream("/$day.txt"), "UTF-8")
 }

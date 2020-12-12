@@ -2,7 +2,6 @@ import org.apache.commons.lang3.math.NumberUtils
 import java.util.regex.Pattern
 
 fun main() {
-    val day = 4
     val testInput = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd\n" +
             "byr:1937 iyr:2017 cid:147 hgt:183cm\n" +
             "\n" +
@@ -107,12 +106,12 @@ fun main() {
                 validatePid(pp["pid"]!!)}
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 2)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
-    solve(day, ::solve2)
+    header(2)
+    solve(::solve2)
 }
 
 

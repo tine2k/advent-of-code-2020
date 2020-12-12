@@ -1,5 +1,4 @@
 fun main() {
-    val day = 6
     val testInput = "abc\n" +
             "\n" +
             "a\n" +
@@ -52,12 +51,12 @@ fun main() {
         return rv.toLong()
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 11)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
+    header(2)
     test(::solve2, testInput, 6)
-    solve(day, ::solve2)
+    solve(::solve2)
 }
 

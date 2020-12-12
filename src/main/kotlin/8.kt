@@ -2,7 +2,6 @@ data class Operation(val i: Int, val cmd: String, val param: Int)
 data class ExitCode(val code: Int, val value: Long)
 
 fun main() {
-    val day = 8
     val testInput = "nop +0\n" +
             "acc +1\n" +
             "jmp +4\n" +
@@ -71,11 +70,11 @@ fun main() {
         return -1
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 5)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
+    header(2)
     test(::solve2, testInput, 8)
-    solve(day, ::solve2)
+    solve(::solve2)
 }

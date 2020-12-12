@@ -1,5 +1,4 @@
 fun main() {
-    val day = -1
     val testInput = ""
 
     fun solve1(lines: List<String>): Long {
@@ -10,10 +9,10 @@ fun main() {
         return 1337
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 1337)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
-    solve(day, ::solve2)
+    header(2)
+    solve(::solve2)
 }

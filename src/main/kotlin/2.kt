@@ -2,7 +2,6 @@ import org.apache.commons.lang3.StringUtils
 import java.util.regex.Pattern
 
 fun main() {
-    val day = 2
     val testInput = "1-3 a: abcde\n" +
             "1-3 b: cdefg\n" +
             "2-9 c: ccccccccc"
@@ -39,12 +38,12 @@ fun main() {
         }
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 2)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
-    solve(day, ::solve2)
+    header(2)
+    solve(::solve2)
 }
 
 

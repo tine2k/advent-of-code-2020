@@ -1,5 +1,4 @@
 fun main() {
-    val day = 1
     val testInput = "1721\n" +
             "979\n" +
             "366\n" +
@@ -31,10 +30,10 @@ fun main() {
         return -1
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 514579)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
-    solve(day, ::solve2)
+    header(2)
+    solve(::solve2)
 }

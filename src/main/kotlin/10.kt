@@ -1,5 +1,4 @@
 fun main() {
-    val day = 10
     val testInput = "28\n" +
             "33\n" +
             "18\n" +
@@ -82,11 +81,11 @@ fun main() {
         return combinations.last()
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 220)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
+    header(2)
     test(::solve2, "16\n10\n15\n5\n1\n11\n7\n19\n6\n12\n4\n", 8)
     test(::solve2, "1\n4\n5\n6\n7\n", 4)
     test(::solve2, "3\n4\n5\n6", 4)
@@ -94,5 +93,5 @@ fun main() {
     test(::solve2, "1\n3\n6", 1)
     test(::solve2, "1\n2\n3\n4", 7)
     test(::solve2, "1\n2\n3\n4\n5", 13)
-    solve(day, ::solve2)
+    solve(::solve2)
 }

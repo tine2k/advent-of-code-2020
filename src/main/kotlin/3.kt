@@ -1,5 +1,4 @@
 fun main() {
-    val day = 3
     val testInput = "..##.......\n" +
             "#...#...#..\n" +
             ".#....#..#.\n" +
@@ -43,12 +42,12 @@ fun main() {
         return solve(lines, intArrayOf(1, 3, 5, 7, 1))
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 7)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
-    solve(day, ::solve2)
+    header(2)
+    solve(::solve2)
 }
 
 

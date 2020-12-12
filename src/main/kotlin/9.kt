@@ -2,7 +2,6 @@ import org.apache.commons.io.IOUtils
 import java.io.StringReader
 
 fun main() {
-    val day = 9
     val testInput = "35\n" +
             "20\n" +
             "15\n" +
@@ -69,11 +68,11 @@ fun main() {
         return -1
     }
 
-    header(day, 1)
+    header(1)
     test(::solve1, testInput, 127)
-    solve(day, ::solve1)
+    solve(::solve1)
 
-    header(day, 2)
+    header(2)
     test(::solve2, testInput, 62)
-    solve(day, ::solve2)
+    solve(::solve2)
 }
