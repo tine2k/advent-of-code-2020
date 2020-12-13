@@ -9,56 +9,6 @@ fun main() {
             "LLLLLLLLLL\n" +
             "L.LLLLLL.L\n" +
             "L.LLLLL.LL"
-    val step2 = "#.##.##.##\n" +
-            "#######.##\n" +
-            "#.#.#..#..\n" +
-            "####.##.##\n" +
-            "#.##.##.##\n" +
-            "#.#####.##\n" +
-            "..#.#.....\n" +
-            "##########\n" +
-            "#.######.#\n" +
-            "#.#####.##"
-    val step3 = "#.LL.L#.##\n" +
-            "#LLLLLL.L#\n" +
-            "L.L.L..L..\n" +
-            "#LLL.LL.L#\n" +
-            "#.LL.LL.LL\n" +
-            "#.LLLL#.##\n" +
-            "..L.L.....\n" +
-            "#LLLLLLLL#\n" +
-            "#.LLLLLL.L\n" +
-            "#.#LLLL.##"
-    val step4 = "#.##.L#.##\n" +
-            "#L###LL.L#\n" +
-            "L.#.#..#..\n" +
-            "#L##.##.L#\n" +
-            "#.##.LL.LL\n" +
-            "#.###L#.##\n" +
-            "..#.#.....\n" +
-            "#L######L#\n" +
-            "#.LL###L.L\n" +
-            "#.#L###.##"
-    val step5 = "#.#L.L#.##\n" +
-            "#LLL#LL.L#\n" +
-            "L.L.L..#..\n" +
-            "#LLL.##.L#\n" +
-            "#.LL.LL.LL\n" +
-            "#.LL#L#.##\n" +
-            "..L.L.....\n" +
-            "#L#LLLL#L#\n" +
-            "#.LLLLLL.L\n" +
-            "#.#L#L#.##"
-    val step6 = "#.#L.L#.##\n" +
-            "#LLL#LL.L#\n" +
-            "L.#.L..#..\n" +
-            "#L##.##.L#\n" +
-            "#.#L.LL.LL\n" +
-            "#.#L#L#.##\n" +
-            "..L.L.....\n" +
-            "#L#L##L#L#\n" +
-            "#.LLLLLL.L\n" +
-            "#.#L#L#.##"
 
     fun convertToArray(lines: List<String>): List<CharArray> {
         return lines.map { it.toCharArray() }
@@ -72,28 +22,51 @@ fun main() {
         }
     }
 
-    fun getOccupiedAdjacentSeatCount(input: List<CharArray>, lineNo: Int, charNo: Int): Int {
-        var count = 0;
-        if (getSeat(input, lineNo - 1, charNo - 1) == '#') count++
-        if (getSeat(input, lineNo - 1, charNo + 0) == '#') count++
-        if (getSeat(input, lineNo - 1, charNo + 1) == '#') count++
-        if (getSeat(input, lineNo + 0, charNo + 1) == '#') count++
-        if (getSeat(input, lineNo + 0, charNo - 1) == '#') count++
-        if (getSeat(input, lineNo + 1, charNo - 1) == '#') count++
-        if (getSeat(input, lineNo + 1, charNo + 0) == '#') count++
-        if (getSeat(input, lineNo + 1, charNo + 1) == '#') count++
-        return count;
+    fun getAdjacentSeat(input: List<CharArray>, lineNo: Int, charNo: Int, diffLine: Int, diffChar: Int): Char {
+        return getSeat(input, lineNo + diffLine, charNo + diffChar)
     }
 
-    fun processStep(input: List<CharArray>): List<CharArray> {
+    fun getVisibleSeat(input: List<CharArray>, lineNo: Int, charNo: Int, diffLine: Int, diffChar: Int): Char {
+        var visibleSeat = '.'
+        var i = 1
+        do {
+            visibleSeat = getSeat(input, lineNo + (diffLine * i), charNo + (diffChar * i))
+            i++
+        } while(visibleSeat == '.')
+        return visibleSeat
+    }
+
+    fun getOccupiedSeatCount(input: List<CharArray>, lineNo: Int, charNo: Int,
+                                     seatCountFn: (input: List<CharArray>, lineNo: Int, charNo: Int, diffLine: Int, diffChar: Int) -> Char): Int {
+        var count = 0
+        if (seatCountFn(input, lineNo, charNo, -1, -1) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, -1, +0) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, -1, +1) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, +0, +1) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, +0, -1) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, +1, -1) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, +1, +0) == '#') count++
+        if (seatCountFn(input, lineNo, charNo, +1, +1) == '#') count++
+        return count
+    }
+
+    fun getOccupiedAdjacentSeatCount(input: List<CharArray>, lineNo: Int, charNo: Int): Int {
+        return getOccupiedSeatCount(input, lineNo, charNo, ::getAdjacentSeat)
+    }
+
+    fun getOccupiedVisibleSeatCount(input: List<CharArray>, lineNo: Int, charNo: Int): Int {
+        return getOccupiedSeatCount(input, lineNo, charNo, ::getVisibleSeat)
+    }
+
+    fun processStep(input: List<CharArray>, minSeatCount: Int, seatCountFn: (input: List<CharArray>, lineNo: Int, charNo: Int) -> Int): List<CharArray> {
         val output = mutableListOf<CharArray>()
         input.forEachIndexed { lineNo, line ->
             output.add(CharArray(line.size))
             line.forEachIndexed { charNo, char ->
-                val occupiedAdjacentSeatCount = getOccupiedAdjacentSeatCount(input, lineNo, charNo)
+                val occupiedAdjacentSeatCount = seatCountFn(input, lineNo, charNo)
                 if (char == 'L' && occupiedAdjacentSeatCount == 0) {
                     output[lineNo][charNo] = '#'
-                } else if (char == '#' && occupiedAdjacentSeatCount >= 4) {
+                } else if (char == '#' && occupiedAdjacentSeatCount >= minSeatCount) {
                     output[lineNo][charNo] = 'L'
                 } else {
                     output[lineNo][charNo] = char
@@ -104,13 +77,13 @@ fun main() {
     }
 
     fun convertToString(input: List<CharArray>): String {
-        return input.joinToString("\n","","", -1, "") { String(it) }
+        return input.joinToString("\n", "", "", -1, "") { String(it) }
     }
 
-    fun solve1(lines: List<String>): Long {
+    fun solve(lines: List<String>, minSeatCount: Int, seatCountFn: (input: List<CharArray>, lineNo: Int, charNo: Int) -> Int): Long {
         var inputStep = convertToArray(lines)
-        while(true) {
-            val step = processStep(inputStep)
+        while (true) {
+            val step = processStep(inputStep, minSeatCount, seatCountFn)
             if (convertToString(step) == convertToString(inputStep)) {
                 break
             } else {
@@ -121,8 +94,12 @@ fun main() {
         return inputStep.sumOf { it.count { it == '#' } }.toLong()
     }
 
+    fun solve1(lines: List<String>): Long {
+        return solve(lines, 4, ::getOccupiedAdjacentSeatCount)
+    }
+
     fun solve2(lines: List<String>): Long {
-        return 1337
+        return solve(lines, 5, ::getOccupiedVisibleSeatCount)
     }
 
     header(1)
@@ -130,5 +107,6 @@ fun main() {
     solve(::solve1)
 
     header(2)
+    test(::solve2, step1, 26)
     solve(::solve2)
 }
