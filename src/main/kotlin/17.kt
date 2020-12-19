@@ -1,11 +1,7 @@
-import com.google.common.collect.Collections2
-import com.google.common.collect.ImmutableSet
-
-
 fun main() {
     val testInput = ".#.\n" +
-            "..#\n" +
-            "###"
+                "..#\n" +
+                "###"
 
     fun getNeighbor(center: List<Int>, index: Int, direction: Int): List<Int> {
         val arrayList = ArrayList(center)
@@ -47,11 +43,11 @@ fun main() {
         return newCubes
     }
 
-    fun solve1(lines: List<String>): Long {
+    fun solve(lines: List<String>, listFn: (i: Int, j: Int) -> List<Int>): Long {
         val activeCubes = mutableSetOf<List<Int>>()
         lines.forEachIndexed { i, it ->
             it.toCharArray().forEachIndexed { j, char ->
-                if (char == '#') activeCubes.add(listOf(0, i, j))
+                if (char == '#') activeCubes.add(listFn.invoke(i, j))
             }
         }
 
@@ -63,8 +59,12 @@ fun main() {
         return currentCubes.size.toLong()
     }
 
+    fun solve1(lines: List<String>): Long {
+        return solve(lines) { i, j -> listOf(0, i, j) }
+    }
+
     fun solve2(lines: List<String>): Long {
-        return 1337
+        return solve(lines) { i, j -> listOf(0, 0, i, j) }
     }
 
     header(1)
@@ -72,5 +72,6 @@ fun main() {
     solve(::solve1)
 
     header(2)
+    test(::solve2, testInput, 848)
     solve(::solve2)
 }

@@ -14,5 +14,6 @@ fun main() {
     solve(::solve1)
 
     header(2)
+    test(::solve2, testInput, 1337)
     solve(::solve2)
 }
