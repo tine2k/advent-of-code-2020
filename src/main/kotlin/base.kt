@@ -8,16 +8,26 @@ fun header(part: Int) {
 }
 
 fun test(solveFn: (List<String>) -> Long, testInput: String, testResult: Int) {
+    return testString({ solveFn.invoke(it).toString() }, testInput, testResult.toLong().toString())
+}
+
+fun testString(solveFn: (List<String>) -> String, testInput: String, testResult: String) {
     val result = solveFn(IOUtils.readLines(StringReader(testInput)))
-    if (result != testResult.toLong()) {
-        println("Test FAILED: Result should be $testResult but was $result")
+    if (result != testResult) {
+        println("Test ❌: Result should be $testResult but was $result")
     } else {
-        println("Test OK")
+        println("Test ✅")
     }
 }
 
 fun solve(solveFn: (List<String>) -> Long, input: List<String> = getInputFile()) {
-    println(solveFn(input))
+    solveString({ solveFn.invoke(it).toString() }, input)
+}
+
+fun solveString(solveFn: (List<String>) -> String, input: List<String> = getInputFile()) {
+    val solution = solveFn(input)
+    println()
+    println("➡️ $solution ⬅️")
     println()
 }
 
