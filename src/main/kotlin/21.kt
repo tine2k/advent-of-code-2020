@@ -6,7 +6,7 @@ fun main() {
             "sqjhc fvjkl (contains soy)\n" +
             "sqjhc mxmxvkd sbzzf (contains fish)"
 
-    fun parseData(lines: List<String>): MutableList<Food> {
+    fun parseData(lines: List<String>): List<Food> {
         val foods = mutableListOf<Food>()
         lines.forEach {
             val tokens = it.split(" (")
@@ -14,7 +14,7 @@ fun main() {
             val ing = tokens[0].split(" ").toMutableList()
             foods.add(Food(alg, ing))
         }
-        return foods
+        return foods.toList()
     }
 
     fun solve(lines: List<String>): Pair<Long, Map<String,String>> {
