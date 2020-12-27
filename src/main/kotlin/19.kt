@@ -19,7 +19,7 @@ fun main() {
             "9: 14 27 | 1 26\n" +
             "10: 23 14 | 28 1\n" +
             "1: \"a\"\n" +
-            "11: 42 31\n" +
+            "11: 42 31\n" + // 42 31 | 42 11 31
             "5: 1 14 | 15 1\n" +
             "19: 14 1 | 14 14\n" +
             "12: 24 14 | 19 1\n" +
@@ -41,7 +41,7 @@ fun main() {
             "21: 14 1 | 1 14\n" +
             "25: 1 1 | 1 14\n" +
             "22: 14 14\n" +
-            "8: 42\n" +
+            "8: 42\n" + // 42 | 42 8
             "26: 14 22 | 1 20\n" +
             "18: 15 15\n" +
             "7: 14 5 | 1 21\n" +
@@ -94,36 +94,41 @@ fun main() {
 
     fun refRuleMatches(
         input: String, refRules: List<Int>, allRules: Map<Int, Rule>,
-        ruleMatcher: (input: String, r: Rule, allRules: Map<Int, Rule>) -> Int,
-    ): Int {
+        ruleMatcher: (input: String, r: Rule, allRules: Map<Int, Rule>) -> Set<Int>,
+    ): Set<Int> {
         assert(refRules.isNotEmpty())
-        var index = 0
+        var indices = setOf<Int>()
         for (refRule in refRules) {
-            val ruleMatches = ruleMatcher.invoke(input.substring(index), allRules[refRule]!!, allRules)
-            if (ruleMatches < 0) {
-                return -1
+            if (indices.isEmpty()) {
+                indices = ruleMatcher.invoke(input, allRules[refRule]!!, allRules)
+                if (indices.isEmpty()) {
+                    return emptySet()
+                }
             } else {
-                index += ruleMatches
+                val allIndicesOfCurrentRule = indices
+                    .flatMap { index -> ruleMatcher.invoke(input.substring(index), allRules[refRule]!!, allRules).map { it + index } }
+                    .toSet()
+                if (allIndicesOfCurrentRule.isEmpty()) {
+                    return emptySet()
+                } else {
+                    indices = allIndicesOfCurrentRule
+                }
             }
         }
-        assert(index > 0)
-        return index
+        return indices.toSet()
     }
 
-    fun ruleMatches(input: String, r: Rule, allRules: Map<Int, Rule>): Int {
+    fun ruleMatches(input: String, r: Rule, allRules: Map<Int, Rule>): Set<Int> {
         return if (r.charCompare != null) {
-            if (input.startsWith(r.charCompare)) 1 else -1
+            if (input.startsWith(r.charCompare)) setOf(1) else emptySet()
         } else {
-            return r.rule!!
-                .map { refRuleMatches(input, it, allRules, ::ruleMatches) }
-                .firstOrNull { it >= 0 }
-                ?: -1
+            return r.rule!!.flatMap { refRuleMatches(input, it, allRules, ::ruleMatches) }.toSet()
         }
     }
 
     fun messageMatches(message: String, allRules: Map<Int, Rule>): Boolean {
         val ruleMatches = ruleMatches(message, allRules[0]!!, allRules)
-        return ruleMatches == message.length
+        return ruleMatches.contains(message.length)
     }
 
     fun solve1(lines: List<String>): Long {
@@ -146,7 +151,7 @@ fun main() {
     solve(::solve1)
 
     header(2)
-    test(::solve1, testInput2, 3) //solve1 on purpose
+    test(::solve1, testInput2, 3) // solve1 on purpose
     test(::solve2, testInput2, 12)
     solve(::solve2)
 }
