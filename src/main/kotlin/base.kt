@@ -8,7 +8,11 @@ fun header(part: Int) {
 }
 
 fun test(solveFn: (List<String>) -> Long, testInput: String, testResult: Int) {
-    return testString({ solveFn.invoke(it).toString() }, testInput, testResult.toLong().toString())
+    return test(solveFn, testInput, testResult.toLong())
+}
+
+fun test(solveFn: (List<String>) -> Long, testInput: String, testResult: Long) {
+    return testString({ solveFn.invoke(it).toString() }, testInput, testResult.toString())
 }
 
 fun testString(solveFn: (List<String>) -> String, testInput: String, testResult: String) {
