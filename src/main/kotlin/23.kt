@@ -1,118 +1,76 @@
-data class Circle(val ranges: MutableList<IntRange>) {
-
-    private val min: Int = ranges.map { it.first }.minOrNull()!!
-    private val max: Int = ranges.map { it.last }.maxOrNull()!!
+data class Circle(val data: MutableMap<Int,Int>, val min: Int, val max: Int) {
 
     fun remove3ElementsAfter(element: Int): List<Int> {
-        return listOf(
-            removeElementAfter(element),
-            removeElementAfter(element),
-            removeElementAfter(element)
-        )
-    }
-
-    private fun removeElementAfter(element: Int): Int {
-        val range = ranges.single { e -> e.contains(element) }
-        val index = ranges.indexOf(range)
-        if (range.last == element) {
-            var nextIndex = index + 1
-            if (index + 1 == ranges.size) {
-                nextIndex = 0
-            }
-            val newRange = ranges[nextIndex]
-            if (newRange.count() == 1) {
-                ranges.remove(newRange)
-            } else {
-                ranges[nextIndex] = newRange.first + 1..newRange.last
-            }
-            return newRange.first
+        val nextElement1 = getElementAfter(element)
+        val nextElement2 = getElementAfter(nextElement1)
+        val nextElement3 = getElementAfter(nextElement2)
+        val newTarget = getElementAfter(nextElement3)
+        data.remove(nextElement1)
+        data.remove(nextElement2)
+        data.remove(nextElement3)
+        if (element + 1 == newTarget) {
+            data.remove(element)
         } else {
-            ranges[index] = range.first..element
-            if (element + 1 < range.last) {
-                ranges.add(index + 1, element + 2..range.last)
-            }
-            return element + 1
+            data[element] = newTarget
         }
+        return listOf(nextElement1, nextElement2, nextElement3)
     }
 
     fun insertElementsAfterElement(element: Int, newElements: List<Int>) {
         assert(newElements.size == 3)
-        insertAfterElement(element, newElements[0])
-        insertAfterElement(newElements[0], newElements[1])
-        insertAfterElement(newElements[1], newElements[2])
-    }
-
-    private fun insertAfterElement(element: Int, newElement: Int) {
-        val range = ranges.single { e -> e.contains(element) }
-        val index = ranges.indexOf(range)
-        if (range.last == element) {
-            if (newElement == element + 1) {
-                ranges[index] = range.first..newElement
-            } else {
-                ranges.add(index + 1, newElement..newElement)
-            }
-        } else {
-            ranges[index] = range.first..element
-            ranges.add(index + 1, newElement..newElement)
-            ranges.add(index + 2, element + 1..range.last)
-        }
+        val nextElement = getElementAfter(element)
+        data[element] = newElements[0]
+        data[newElements[0]] = newElements[1]
+        data[newElements[1]] = newElements[2]
+        data[newElements[2]] = nextElement
     }
 
     fun getElementAfter(element: Int): Int {
-        val range = ranges.single { e -> e.contains(element) }
-        return if (range.last == element) {
-            if (ranges.last() == range) {
-                ranges[0].first
-            } else {
-                ranges[ranges.indexOf(range) + 1].first
+        return data[element] ?: element + 1
+    }
+
+    fun getNextLowerElement(element: Int, lastRemoved: List<Int>): Int {
+        var nextLower = element
+        do {
+            nextLower -= 1
+            if (nextLower < min) {
+                nextLower = max
             }
-        } else {
-            element + 1
-        }
-    }
-
-    private fun hasElement(element: Int): Boolean {
-        return ranges.any { e -> e.contains(element) }
-    }
-
-    fun getNextLowerElement(element: Int): Int {
-        var newElement = element - 1
-        if (newElement < min) {
-            newElement = max
-        }
-        return if (hasElement(newElement)) {
-            newElement
-        } else {
-            getNextLowerElement(newElement)
-        }
+        } while(lastRemoved.contains(nextLower))
+        return nextLower
     }
 }
 
 fun main() {
     val testInput = "389125467"
 
-    fun solve(circle: Circle, count: Int): Circle {
-        var currentCup = circle.ranges.first().first
-        var counter = 0
-        var t1 = System.currentTimeMillis()
+    fun solve(circle: Circle, count: Int, start: Int): Circle {
+        var currentCup = start
         for (i in 0 until count) {
-            counter++
-            if (counter % 1_000 == 0) {
-                println("" + counter + " in " + (System.currentTimeMillis() - t1) + " with size " + circle.ranges.size)
-                t1 = System.currentTimeMillis()
-            }
-
             val moveCups = circle.remove3ElementsAfter(currentCup)
-
-            circle.insertElementsAfterElement(circle.getNextLowerElement(currentCup), moveCups)
+            circle.insertElementsAfterElement(circle.getNextLowerElement(currentCup, moveCups), moveCups)
             currentCup = circle.getElementAfter(currentCup)
         }
         return circle
     }
 
+    fun initData(lines: List<String>) : Pair<MutableMap<Int,Int>, Int> {
+        val initDigits = lines[0].toCharArray().map { it.toString().toInt() }
+        val data = mutableMapOf<Int,Int>()
+        initDigits.forEachIndexed { i, d ->
+            if (i == initDigits.size - 1) {
+                data[d] = initDigits[0]
+            } else {
+                data[d] = initDigits[i + 1]
+            }
+        }
+        return Pair(data, initDigits[0])
+    }
+
     fun solve1(lines: List<String>): Long {
-        val cups =
-            solve(Circle(lines[0].toCharArray().map { it.toString().toInt() }.map { it..it }.toMutableList()), 100)
+        val initData = initData(lines)
+        val data = initData(lines).first
+        val cups = solve(Circle(data, data.keys.minOrNull()!!, data.keys.maxOrNull()!!), 100, initData.second)
 
         var rv = ""
         var nextElement = cups.getElementAfter(1)
@@ -124,14 +82,12 @@ fun main() {
     }
 
     fun solve2(lines: List<String>): Long {
-        val initDigits = lines[0].toCharArray()
-            .map { it.toString().toInt() }
-        val cups = initDigits
-            .map { it..it }
-            .toMutableList()
-        cups.add(initDigits.maxOrNull()!!+1..1_000_000)
+        val initData = initData(lines)
+        val data = initData.first
+        data[lines[0].last().toString().toInt()] = data.keys.maxOrNull()!! + 1
+        data[1_000_000] = initData.second
 
-        val newCups = solve(Circle(cups), 10_000_000)
+        val newCups = solve(Circle(data, data.keys.minOrNull()!!, 1_000_000), 10_000_000, initData.second)
 
         return newCups.getElementAfter(1) * newCups.getElementAfter(newCups.getElementAfter(1)).toLong()
     }
